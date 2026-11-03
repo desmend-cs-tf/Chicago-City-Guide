@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Chicago, Illinois"
+description = "A mobile-friendly single-page introduction to Chicago, with local food, quick facts, city leadership, the state bird, and a visitor's personal likes list."
+version = "1.0.0"
+id = "artifacts/chicago-guide"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19533
+
+[services.development]
+run = "pnpm --filter @workspace/chicago-guide run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/chicago-guide", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/chicago-guide/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19533"
+BASE_PATH = "/"
