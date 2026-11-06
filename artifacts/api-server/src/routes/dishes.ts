@@ -2,6 +2,7 @@ import { Router, type IRouter } from "express";
 import { DishUpload, parseImageDataUrl, toGalleryItem } from "../lib/dishUpload";
 import { memoryDishStore } from "../lib/dishStore";
 import { dbDishStore } from "../lib/dishStore.db";
+import { inspectDish } from "../agents/dishInspector";
 
 // Step 1 used memoryDishStore (forgets on restart).
 // Step 2 switches to the Postgres pantry so photos survive restarts.
@@ -42,14 +43,26 @@ router.post("/dishes", async (req, res) => {
     return;
   }
 
-  // Activity 3 adds the inspector agent right here, before we save.
+  // Activity 3: the inspector checks the plate before it leaves the kitchen.
+  let inspection: Awaited<ReturnType<typeof inspectDish>>;
+  try {
+    inspection = await inspectDish(image);
+  } catch (err) {
+    req.log.error({ err }, "inspector failed");
+    res.status(502).json({ error: "The inspector is on break. Try again in a minute." });
+    return;
+  }
+  if (!inspection.approved) {
+    res.status(422).json({ error: inspection.error, reason: inspection.reason });
+    return;
+  }
 
   const saved = await store.add({
     title: parsed.data.title,
     caption: parsed.data.caption ?? "",
     mimeType: image.mimeType,
     imageBase64: image.base64,
-    inspectorNote: null,
+    inspectorNote: inspection.note,
   });
   res.status(201).json({ dish: toGalleryItem(saved) });
 });

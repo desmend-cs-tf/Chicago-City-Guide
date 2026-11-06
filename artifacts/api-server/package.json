@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@google/genai": "latest",
+    "@langchain/core": "latest",
+    "@langchain/google": "latest",
     "@workspace/api-zod": "workspace:*",
     "@workspace/db": "workspace:*",
     "cookie-parser": "^1.4.7",

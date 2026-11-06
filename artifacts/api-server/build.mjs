@@ -65,6 +65,7 @@ async function buildAll() {
       "@opentelemetry/*",
       "@google-cloud/*",
       "@google/*",
+      "@langchain/*", // Activity 3: load LangChain from node_modules at runtime
       "googleapis",
       "firebase-admin",
       "@parcel/watcher",
