@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="./script.js"></script>
   <script type="module" src="./chat.js"></script>
+  <script type="module" src="./gallery.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -74,6 +75,34 @@
         <p class="food-lead">The first date is<br><em>deep dish.</em></p>
         <p>Chicago deep-dish pizza is less a quick bite and more a proper occasion: a buttery high edge, a generous middle, and tomato sauce that gets the last word. Bring an appetite—and someone to share the wait with.</p>
         <div class="food-detail"><span class="detail-dot"></span><span>ORDER SLOWLY. ENJOY THOROUGHLY.</span></div>
+      </div>
+    </section>
+
+    <section class="gallery-section" id="dish-gallery" aria-labelledby="gallery-title">
+      <div class="gallery-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> 02B / SHOW US YOUR SLICE</p>
+          <h2 id="gallery-title">THE DEEP DISH<br><em>GALLERY</em></h2>
+        </div>
+        <p>Share a photo of the city's favorite dish. Every photo goes through the kitchen before it reaches the wall.</p>
+      </div>
+
+      <div class="gallery-body">
+        <form id="dish-form" class="dish-form">
+          <label for="dish-title">Title</label>
+          <input id="dish-title" type="text" maxlength="80" value="Deep dish" required>
+          <label for="dish-caption">Caption <span class="optional">(optional)</span></label>
+          <input id="dish-caption" type="text" maxlength="280" placeholder="Where did you get it? Who did you share it with?">
+          <label for="dish-file">Photo</label>
+          <input id="dish-file" type="file" accept="image/jpeg,image/png,image/webp">
+          <img id="dish-preview" class="dish-preview" alt="Preview of the photo you chose" hidden>
+          <button type="submit">UPLOAD PHOTO <span aria-hidden="true">↑</span></button>
+          <p id="dish-message" class="dish-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <ul id="dish-grid" class="dish-grid" aria-label="Deep dish photo gallery">
+          <li class="dish-empty">Loading the gallery...</li>
+        </ul>
       </div>
     </section>
 
