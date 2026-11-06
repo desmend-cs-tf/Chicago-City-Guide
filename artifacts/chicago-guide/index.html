@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="./script.js"></script>
+  <script type="module" src="./chat.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -121,6 +122,49 @@
             <li class="empty-note">Your list is waiting for its first good find.</li>
           </ul>
           <p class="memory-note"><span aria-hidden="true">•</span> Just for this visit. Nothing is saved after you leave.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="guide-section" id="ask-the-guide" aria-labelledby="guide-title">
+      <div class="guide-inner">
+        <div class="guide-heading">
+          <p class="eyebrow"><span class="eyebrow-line"></span> 05 / ASK A LOCAL</p>
+          <h2 id="guide-title">ASK THE<br>CITY <em>GUIDE</em></h2>
+          <p>An AI guide that answers like a local. Change the settings in the Prompt Lab and watch how the answers change.</p>
+
+          <div class="prompt-lab" aria-label="Prompt Lab settings">
+            <p class="lab-title">PROMPT LAB</p>
+            <label for="temperature">Temperature <output for="temperature"></output></label>
+            <input id="temperature" type="range" min="0" max="2" step="0.1" value="1">
+            <p class="lab-hint">Low = steady and predictable. High = wild and creative.</p>
+
+            <label for="max-tokens">Max tokens <output for="max-tokens"></output></label>
+            <input id="max-tokens" type="range" min="32" max="1024" step="16" value="304">
+            <p class="lab-hint">The portion size: how long an answer is allowed to be.</p>
+
+            <label for="top-p">Top-p <output for="top-p"></output></label>
+            <input id="top-p" type="range" min="0" max="1" step="0.05" value="0.95">
+            <p class="lab-hint">How many word choices the guide may pick from.</p>
+
+            <details class="system-prompt">
+              <summary>See the system prompt (the house rules)</summary>
+              <pre id="system-prompt-text">Loading...</pre>
+            </details>
+          </div>
+        </div>
+
+        <div class="chat-panel">
+          <ul id="chat-log" class="chat-log" aria-live="polite" aria-label="Conversation with the city guide">
+            <li class="chat-empty">Try: "What should I eat first?" or "Is it really that windy?"</li>
+          </ul>
+          <form id="chat-form" class="chat-form">
+            <label for="chat-input" class="sr-only">Your question for the city guide</label>
+            <input id="chat-input" type="text" maxlength="1000" placeholder="Ask the guide anything about the city..." autocomplete="off">
+            <button type="submit">ASK <span aria-hidden="true">→</span></button>
+          </form>
+          <p id="chat-status" class="chat-status" aria-live="polite"></p>
+          <p class="memory-note"><span aria-hidden="true">•</span> Answers come from AI and can be wrong. Never share personal info.</p>
         </div>
       </div>
     </section>

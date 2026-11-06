@@ -453,3 +453,39 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .food-image-wrap img { transition: none; }
 }
+
+/* ===== Activity 1: Ask the City Guide ===== */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.guide-section { padding: 72px clamp(28px, 8vw, 120px); background: var(--paper); border-top: 1px solid var(--line); }
+.guide-inner { display: grid; grid-template-columns: .85fr 1.15fr; gap: 7%; max-width: 1180px; margin: auto; }
+.guide-heading h2 { margin: 0 0 16px; font: 800 clamp(44px, 5vw, 66px)/.9 var(--sans); letter-spacing: -.06em; }
+.guide-heading > p:not(.eyebrow) { color: #5f6871; line-height: 1.65; max-width: 360px; }
+.prompt-lab { margin-top: 22px; padding: 18px 20px; background: #fff; border: 1px solid #dce0e3; border-top: 4px solid var(--red); }
+.lab-title { margin: 0 0 12px; color: var(--red); font: 800 10px var(--sans); letter-spacing: .14em; }
+.prompt-lab label { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; color: #30353a; }
+.prompt-lab output { color: var(--red); font: 700 12px var(--mono); }
+.prompt-lab input[type="range"] { width: 100%; accent-color: var(--red); margin: 6px 0 2px; }
+.lab-hint { margin: 0 0 12px; color: #6b737b; font-size: 12px; }
+.system-prompt summary { cursor: pointer; font-weight: 700; font-size: 12px; color: #30353a; }
+.system-prompt pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); background: #f4f5f6; padding: 10px; max-height: 220px; overflow: auto; }
+.chat-panel { display: flex; flex-direction: column; background: #fff; border: 1px solid #dce0e3; border-top: 4px solid var(--red); padding: 20px; min-height: 520px; }
+.chat-log { list-style: none; margin: 0; padding: 0; flex: 1; overflow-y: auto; max-height: 520px; display: flex; flex-direction: column; gap: 12px; }
+.chat-empty { color: #737c84; font-size: 13px; padding: 8px 0; }
+.bubble { max-width: 86%; padding: 11px 14px; border-radius: 3px; }
+.bubble p { margin: 4px 0 0; line-height: 1.55; white-space: pre-wrap; }
+.bubble small { display: block; margin-top: 6px; color: #7a828a; font: 10px var(--mono); }
+.bubble-who { font: 800 9px var(--sans); letter-spacing: .12em; }
+.bubble.user { align-self: flex-end; background: #293138; color: #fff; }
+.bubble.user .bubble-who { color: #ff9a9c; }
+.bubble.guide { align-self: flex-start; background: #f4f1ea; border-left: 4px solid var(--red); }
+.bubble.guide .bubble-who { color: var(--red); }
+.chat-form { display: flex; gap: 10px; margin-top: 14px; border-top: 1px solid #e1e4e7; padding-top: 14px; }
+.chat-form input { flex: 1; min-width: 0; padding: 12px; border: 1px solid #c4cad0; border-radius: 3px; font-size: 14px; }
+.chat-form input:focus { outline: 2px solid var(--red); border-color: transparent; }
+.chat-form button { border: 0; border-radius: 3px; padding: 0 18px; background: var(--red); color: #fff; font: 800 11px var(--sans); letter-spacing: .1em; cursor: pointer; }
+.chat-form button:disabled { opacity: .55; cursor: wait; }
+.chat-status { min-height: 18px; margin: 8px 0 0; color: #a91f2d; font-size: 12px; }
+@media (max-width: 800px) {
+  .guide-inner { grid-template-columns: 1fr; gap: 28px; }
+  .chat-panel { min-height: 420px; }
+}
