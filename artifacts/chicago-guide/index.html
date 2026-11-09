@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="./script.js"></script>
   <script type="module" src="./chat.js"></script>
+  <script type="module" src="./gallery.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -74,6 +75,33 @@
         <p class="food-lead">The first date is<br><em>deep dish.</em></p>
         <p>Chicago deep-dish pizza is less a quick bite and more a proper occasion: a buttery high edge, a generous middle, and tomato sauce that gets the last word. Bring an appetite—and someone to share the wait with.</p>
         <div class="food-detail"><span class="detail-dot"></span><span>ORDER SLOWLY. ENJOY THOROUGHLY.</span></div>
+      </div>
+    </section>
+
+    <section class="pizza-gallery page-section" id="pizza-gallery" aria-labelledby="gallery-title">
+      <div class="gallery-heading">
+        <p class="eyebrow"><span class="eyebrow-line"></span> PIZZA FILES / FIND A SLICE</p>
+        <h2 id="gallery-title">THE DEEP-DISH<br><em>GALLERY</em></h2>
+        <p>Search Unsplash for Chicago pizza photos, then add your favorites to a gallery saved in this browser.</p>
+        <form id="photo-search-form" class="photo-search-form">
+          <label for="photo-search">Search Unsplash photos</label>
+          <div class="photo-search-row">
+            <input id="photo-search" name="query" type="search" minlength="3" maxlength="120" value="Chicago deep dish pizza" required>
+            <button type="submit">SEARCH <span aria-hidden="true">→</span></button>
+          </div>
+          <p class="gallery-key-help">Get an Access Key from <a href="https://unsplash.com/developers" target="_blank" rel="noreferrer">Unsplash Developers</a>, then save it in Replit Secrets as <code>UNSPLASH_ACCESS_KEY</code>.</p>
+        </form>
+        <p class="gallery-status" id="gallery-status" role="status" aria-live="polite">Search to find photos. Add your Unsplash Access Key in Replit Secrets to enable results.</p>
+      </div>
+      <div class="gallery-results-wrap">
+        <div class="gallery-results" id="gallery-results" aria-label="Unsplash search results"></div>
+      </div>
+      <div class="saved-gallery-wrap">
+        <div class="saved-gallery-heading">
+          <h3>Your saved photos</h3>
+          <p>Saved on this device only.</p>
+        </div>
+        <div class="saved-gallery" id="saved-gallery" aria-label="Your saved deep-dish photos"></div>
       </div>
     </section>
 

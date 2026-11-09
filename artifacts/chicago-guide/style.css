@@ -454,6 +454,164 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .food-image-wrap img { transition: none; }
 }
 
+/* ===== Activity 4: Unsplash deep-dish gallery ===== */
+.pizza-gallery {
+  padding: 82px clamp(24px, 8vw, 120px);
+  border-top: 4px solid var(--red);
+  background: #e5e8eb;
+}
+.gallery-heading,
+.saved-gallery-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.gallery-heading h2 {
+  margin: 0;
+  font: 800 clamp(42px, 5.3vw, 70px)/.93 var(--sans);
+  letter-spacing: -.06em;
+}
+.gallery-heading h2 em { color: var(--red); }
+.gallery-heading > p:not(.eyebrow):not(.gallery-status) {
+  max-width: 520px;
+  color: #5f6871;
+  line-height: 1.7;
+}
+.photo-search-form {
+  max-width: 640px;
+  margin-top: 28px;
+}
+.photo-search-form label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.photo-search-row {
+  display: flex;
+  gap: 10px;
+}
+.photo-search-row input {
+  min-width: 0;
+  flex: 1;
+  padding: 13px 14px;
+  border: 1px solid #c8cdd2;
+  background: #fff;
+  color: var(--ink);
+}
+.photo-search-row input:focus { border-color: var(--red); }
+.photo-search-row button,
+.gallery-card button {
+  border: 0;
+  background: var(--red);
+  color: white;
+  font: 700 10px var(--mono);
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.photo-search-row button { padding: 0 19px; }
+.gallery-key-help {
+  margin: 10px 0 0;
+  color: #68727b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.gallery-key-help a { color: #394b57; }
+.gallery-key-help code {
+  padding: 2px 4px;
+  background: rgba(255,255,255,.72);
+  color: var(--ink);
+  font-size: 10px;
+}
+.photo-search-row button:hover,
+.gallery-card button:hover { background: var(--red-deep); }
+.photo-search-row button:disabled,
+.gallery-card button:disabled { opacity: .58; cursor: wait; }
+.gallery-status {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  color: #68727b;
+  font-size: 12px;
+}
+.gallery-results-wrap,
+.saved-gallery-wrap { margin: 38px auto 0; }
+.gallery-results,
+.saved-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.saved-gallery-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+.saved-gallery-heading h3 {
+  margin: 0;
+  font-size: 20px;
+}
+.saved-gallery-heading p {
+  margin: 0;
+  color: #69717b;
+  font-size: 11px;
+}
+.gallery-empty {
+  grid-column: 1 / -1;
+  padding: 22px;
+  border: 1px dashed #b8c0c7;
+  color: #68727b;
+  font-size: 13px;
+}
+.gallery-card {
+  overflow: hidden;
+  min-width: 0;
+  background: #fff;
+  border-top: 4px solid var(--red);
+  box-shadow: 0 2px 10px rgba(23,33,42,.08);
+}
+.gallery-card > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #d8dfe3;
+}
+.gallery-card-body { padding: 14px; }
+.gallery-credit {
+  margin: 0 0 12px;
+  color: #5f6871;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.gallery-credit a { color: #394b57; }
+.gallery-card button {
+  min-height: 38px;
+  padding: 0 13px;
+}
+.gallery-card button.is-added {
+  background: #344d55;
+  cursor: default;
+}
+.saved-gallery .gallery-card button {
+  background: #38434a;
+}
+.saved-gallery .gallery-card button:hover { background: #202328; }
+
+@media (max-width: 800px) {
+  .pizza-gallery { padding: 65px 7%; }
+  .gallery-results,
+  .saved-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .pizza-gallery { padding: 54px 6%; }
+  .photo-search-row { flex-direction: column; }
+  .photo-search-row button { min-height: 44px; }
+  .gallery-results,
+  .saved-gallery { grid-template-columns: 1fr; }
+  .saved-gallery-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+}
+
 /* ===== Activity 1: Ask the City Guide ===== */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .guide-section { padding: 72px clamp(28px, 8vw, 120px); background: var(--paper); border-top: 1px solid var(--line); }
