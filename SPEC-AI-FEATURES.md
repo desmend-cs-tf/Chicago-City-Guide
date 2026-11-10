@@ -106,6 +106,34 @@
 
 ---
 
+## Feature 4: Unsplash Food Explorer (External API Integration)
+**Goal:** dynamically fetch real-world food inspiration photos using the Unsplash API based on the city's favorite dish configured in Part A.
+
+**Requirements**
+
+Read the UNSPLASH_ACCESS_KEY secret on the server. If missing, return 503 with a friendly message stating the key needs to be configured.
+
+Create an endpoint GET /api/unsplash/dish-inspiration that queries Unsplash's GET /search/photos endpoint.
+
+Automatically build the query parameter using Part A's favorite dish (e.g., query="Chicago deep-dish pizza").
+
+Return a clean array of up to 6 photos with { id, imageUrl, rawUrl, altText, photographerName, photographerProfileUrl, downloadLocation }.
+
+Implement mandatory Unsplash API guidelines:
+
+Provide proper photographer attribution links with utm_source tracking parameters.
+
+Trigger a request to the photo's download_location endpoint when a user clicks to expand or save an image to comply with Unsplash API guidelines.
+
+Front-end UI: add an "Inspiration Grid" section below the gallery showing these high-quality stock photos with author credits and a "Refresh Inspiration" button.
+
+**Acceptance tests**
+When I load the page, I see 6 high-res photos matching the city's favorite dish fetched live from Unsplash.
+
+When I click a photographer's name, it opens their Unsplash profile in a new tab with proper attribution.
+
+Given no UNSPLASH_ACCESS_KEY secret set, when the endpoint is called, then I see a user-friendly error message stating the feature is unconfigured rather than a server crash.
+
 ## Out of scope
 
 - User accounts and logins
