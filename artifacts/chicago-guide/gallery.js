@@ -54,10 +54,11 @@ uploadForm.addEventListener("submit", async (event) => {
         image: preparedImage,
       }),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     if (!res.ok) {
       // Activity 3: the inspector's "only deep dish" error shows up here.
-      showMessage(data.error + (data.reason ? ` ${data.reason}` : ""), "error");
+      const message = data.error || `The server could not save the photo (HTTP ${res.status}). Please try again.`;
+      showMessage(message + (data.reason ? ` ${data.reason}` : ""), "error");
       return;
     }
     showMessage("Added to the gallery!", "success");
@@ -75,7 +76,11 @@ uploadForm.addEventListener("submit", async (event) => {
 async function loadGallery() {
   try {
     const res = await fetch("/api/dishes");
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      galleryGrid.replaceChildren(note(data.error || `The gallery is unavailable (HTTP ${res.status}).`));
+      return;
+    }
     renderGallery(data.dishes);
   } catch {
     galleryGrid.replaceChildren(note("Start the API server to see the gallery."));

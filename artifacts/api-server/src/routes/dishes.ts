@@ -9,16 +9,33 @@ void memoryDishStore;
 const store = dbDishStore;
 const router: IRouter = Router();
 
+function errorCode(error: unknown): string | undefined {
+  if (typeof error !== "object" || error === null || !("code" in error)) return undefined;
+  return typeof error.code === "string" ? error.code : undefined;
+}
+
 // GET /api/dishes: the gallery menu (no image data, just links to each image)
 router.get("/dishes", async (_req, res) => {
-  const rows = await store.list();
-  res.json({ dishes: rows.map(toGalleryItem) });
+  try {
+    const rows = await store.list();
+    res.json({ dishes: rows.map(toGalleryItem) });
+  } catch (error) {
+    _req.log.error({ code: errorCode(error) }, "Could not load dish gallery");
+    res.status(503).json({ error: "The gallery is temporarily unavailable. Please try again." });
+  }
 });
 
 // GET /api/dishes/:id/image: serve one photo's bytes
 router.get("/dishes/:id/image", async (req, res) => {
   const id = Number(req.params.id);
-  const dish = Number.isInteger(id) ? await store.get(id) : undefined;
+  let dish;
+  try {
+    dish = Number.isInteger(id) ? await store.get(id) : undefined;
+  } catch (error) {
+    req.log.error({ code: errorCode(error) }, "Could not load dish photo");
+    res.status(503).json({ error: "This photo is temporarily unavailable. Please try again." });
+    return;
+  }
   if (!dish) {
     res.status(404).json({ error: "Photo not found." });
     return;
@@ -44,13 +61,21 @@ router.post("/dishes", async (req, res) => {
 
   // Activity 3 adds the inspector agent right here, before we save.
 
-  const saved = await store.add({
-    title: parsed.data.title,
-    caption: parsed.data.caption ?? "",
-    mimeType: image.mimeType,
-    imageBase64: image.base64,
-    inspectorNote: null,
-  });
+  let saved;
+  try {
+    saved = await store.add({
+      title: parsed.data.title,
+      caption: parsed.data.caption ?? "",
+      mimeType: image.mimeType,
+      imageBase64: image.base64,
+      inspectorNote: null,
+    });
+  } catch (error) {
+    // Do not log the raw database error: its parameters can contain the photo bytes.
+    req.log.error({ code: errorCode(error) }, "Could not save dish photo");
+    res.status(503).json({ error: "The gallery could not save this photo right now. Please try again." });
+    return;
+  }
   res.status(201).json({ dish: toGalleryItem(saved) });
 });
 
