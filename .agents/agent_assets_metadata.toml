@@ -1,0 +1,58 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "aSudnqhgu4kxTAJcRnhKY"
+uri = "file://handouts/api-post-put-student-guide.pdf"
+type = "pdf"
+title = "API POST and PUT Guide (PDF)"
+description = "Three-page printable guide to the gallery API, current POST flow, status codes, and a hands-on PUT implementation exercise."
+logical_id = "1573f848-652f-4b0a-b2d1-df0a9b2d2ced"
+content_hash = "sha256:710001cd570f1e43d3ed20763a6bf4f3764b7fabdb3ecd2a8302754134f12228"
+size = 148036
+mtime_ms = 1794273783813
+storage_uri = "gcs://replit-rams-assets-worf/rams/assets/repl:dabbb285-e1bd-40e6-baca-43fabc4f2c68/1573f848-652f-4b0a-b2d1-df0a9b2d2ced/8e0250ce-930a-458c-8378-a55326cd3383"
+storage_version_token = "1794273894364441"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "aUfL6tx3zCj7AiT5wq4vr"
+uri = "file://handouts/api-post-put-student-guide.html"
+type = "html"
+title = "API POST and PUT Guide (HTML)"
+description = "Editable, self-contained HTML version of the API guide."
+logical_id = "5889c0fd-11bc-4192-96d9-3aa2d495f93b"
+content_hash = "sha256:f9477f532d05b7f8bfc544df2d048171e3c77deeb1b63ea332d28092aaa62053"
+size = 11709
+mtime_ms = 1794273740559
+storage_uri = "gcs://replit-rams-assets-worf/rams/assets/repl:dabbb285-e1bd-40e6-baca-43fabc4f2c68/5889c0fd-11bc-4192-96d9-3aa2d495f93b/5c1f98be-fc30-47ab-90dc-503aac9594ec"
+storage_version_token = "1794273894826496"
+content_type = "text/html"
+
+[[outputs]]
+id = "Tijyil80ifw7CAbkD1e9n"
+uri = "file://handouts/inspector-agent-student-guide.pdf"
+type = "pdf"
+title = "Inspector Agent Lab (PDF)"
+description = "Three-page printable student lab explaining the Gemini image Inspector, structured verdicts, safe decision flow, and tests."
+logical_id = "b941782b-7c72-4006-bea1-2e429b3ef123"
+content_hash = "sha256:d36b25abc345ca0583d6e7c21b9469980a7125985c2dcac52830e33791d6ca9c"
+size = 142622
+mtime_ms = 1794273789125
+storage_uri = "gcs://replit-rams-assets-worf/rams/assets/repl:dabbb285-e1bd-40e6-baca-43fabc4f2c68/b941782b-7c72-4006-bea1-2e429b3ef123/58733a75-d161-47df-882c-3f8e4a98c905"
+storage_version_token = "1794273895262068"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "Vb5mb4iNcKjoRdzY-mwDN"
+uri = "file://handouts/inspector-agent-student-guide.html"
+type = "html"
+title = "Inspector Agent Lab (HTML)"
+description = "Editable, self-contained HTML version of the Inspector lab."
+logical_id = "0ab80526-6057-4c48-9ea8-679e0912a3ce"
+content_hash = "sha256:aae0de587be27a875fcd75d3ba809f006d8415122717ddf8bd7db56104baac2a"
+size = 11342
+mtime_ms = 1794273759773
+storage_uri = "gcs://replit-rams-assets-worf/rams/assets/repl:dabbb285-e1bd-40e6-baca-43fabc4f2c68/0ab80526-6057-4c48-9ea8-679e0912a3ce/3fe43a26-f681-4428-8a4b-b19af5f00bff"
+storage_version_token = "1794273895737567"
+content_type = "text/html"

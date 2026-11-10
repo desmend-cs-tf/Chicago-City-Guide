@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API Guide — POST and PUT</title>
+    <style>
+      :root{--ink:#20252b;--muted:#58636e;--red:#bd303b;--blue:#203d4b;--wash:#f2f5f6;--line:#d9dfe3;--code:#17232b}
+      *{box-sizing:border-box}
+      body{margin:0;background:#e9edef;color:var(--ink);font:14px/1.48 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+      .page{position:relative;width:min(8.5in,calc(100% - 32px));min-height:11in;margin:22px auto;padding:.57in .67in .68in;background:#fff;box-shadow:0 12px 38px #10202b1a}
+      .eyebrow{margin:0 0 8px;color:var(--red);font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+      h1{margin:0 0 12px;font-size:46px;line-height:.98;letter-spacing:-.055em}
+      h1 span,h2 span{color:var(--red)}
+      h2{margin:0 0 9px;font-size:25px;line-height:1.1;letter-spacing:-.035em}
+      h3{margin:0 0 5px;font-size:15px;line-height:1.25}
+      p{margin:0 0 9px}
+      .lead{max-width:650px;margin-bottom:20px;color:var(--muted);font-size:16px}
+      .rule{height:4px;margin:17px 0;background:var(--red)}
+      .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .card{padding:13px 15px;border:1px solid var(--line);border-top:3px solid var(--red)}
+      .tint{background:var(--wash)}
+      .blue{padding:14px 16px;background:var(--blue);color:white}
+      .blue p:last-child,.card p:last-child{margin-bottom:0}
+      .small{color:var(--muted);font-size:11.5px}
+      table{width:100%;margin:10px 0 14px;border-collapse:collapse;font-size:12px}
+      th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+      th{background:var(--wash);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+      code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      code{color:#962936;font-size:.92em}
+      pre{overflow-wrap:anywhere;margin:7px 0 10px;padding:11px 12px;border-radius:4px;background:var(--code);color:#edf3f6;font-size:10.4px;line-height:1.45;white-space:pre-wrap}
+      pre code{color:inherit}
+      .step{display:grid;grid-template-columns:28px 1fr;gap:9px;margin:12px 0}
+      .num{display:grid;width:25px;height:25px;place-items:center;border-radius:50%;background:var(--red);color:white;font-weight:800}
+      ul,ol{padding-left:19px;margin:6px 0 10px}
+      li{margin:3px 0}
+      .footer{position:absolute;right:.67in;bottom:.25in;left:.67in;display:flex;justify-content:space-between;padding-top:7px;border-top:1px solid var(--line);color:var(--muted);font-size:9px;letter-spacing:.04em}
+      .page-break{break-before:page}
+      @media(max-width:680px){.page{width:100%;min-height:auto;margin:0;padding:24px 20px 54px}.grid{grid-template-columns:1fr}.footer{right:20px;bottom:14px;left:20px}}
+      @media print{@page{size:letter;margin:0}body{background:white;font-size:11.5px}.page{width:8.5in;height:11in;min-height:11in;margin:0;padding:.55in .65in .65in;box-shadow:none;break-after:page;page-break-after:always}.page:last-child{break-after:auto;page-break-after:auto}.footer{right:.65in;bottom:.24in;left:.65in}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="page">
+        <p class="eyebrow">Replit classroom guide · Express API</p>
+        <h1>APIs: <span>POST</span> and PUT</h1>
+        <p class="lead">An API is an agreement between a client and a server. The client sends a request; the server validates it, does the work, and returns a response.</p>
+        <div class="grid">
+          <div class="blue"><h3>Learning goals</h3><ul><li>Read an API route and its request/response shape.</li><li>Explain the difference between GET, POST, PUT, and PATCH.</li><li>Add a safe update route to the gallery API.</li></ul></div>
+          <div class="card tint"><h3>In this project</h3><p>Express mounts the router under <code>/api</code>. For example, <code>router.get("/dishes")</code> becomes <code>GET /api/dishes</code>.</p></div>
+        </div>
+        <div class="rule"></div>
+        <h2>Route <span>map</span></h2>
+        <table>
+          <thead><tr><th>Method + path</th><th>Purpose</th><th>Branch status</th></tr></thead>
+          <tbody>
+            <tr><td><code>GET /api/dishes</code></td><td>List gallery entries as JSON.</td><td>Implemented</td></tr>
+            <tr><td><code>GET /api/dishes/:id/image</code></td><td>Return one image as image bytes.</td><td>Implemented</td></tr>
+            <tr><td><code>POST /api/dishes</code></td><td>Validate, inspect, and create a photo.</td><td>Implemented</td></tr>
+            <tr><td><code>PUT /api/dishes/:id</code></td><td>Replace editable details for one photo.</td><td>Class exercise — not implemented yet</td></tr>
+          </tbody>
+        </table>
+        <div class="card">
+          <h3>Think of the request as a package</h3>
+          <p><strong>Method</strong> says what action to take. <strong>Path</strong> says which resource. <strong>Headers</strong> describe the format. <strong>Body</strong> carries data. The response includes a status code and, often, JSON.</p>
+        </div>
+        <div class="rule"></div>
+        <h2>POST vs PUT vs PATCH</h2>
+        <table>
+          <thead><tr><th>Method</th><th>Use it when</th><th>Typical result</th></tr></thead>
+          <tbody>
+            <tr><td><code>POST</code></td><td>Creating a new resource; server assigns its ID.</td><td><code>201 Created</code></td></tr>
+            <tr><td><code>PUT</code></td><td>Replacing the editable representation at a known ID.</td><td><code>200 OK</code></td></tr>
+            <tr><td><code>PATCH</code></td><td>Changing only some fields.</td><td><code>200 OK</code></td></tr>
+          </tbody>
+        </table>
+        <p class="small"><strong>Class convention:</strong> this exercise defines PUT as replacing the complete editable photo details (title and caption). It leaves the image and Inspector result unchanged. Use PATCH if the API should accept only one changed field.</p>
+        <div class="footer"><span>CHICAGO GALLERY · API POST/PUT GUIDE</span><span>PAGE 1 / 3</span></div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Read the current API · POST</p>
+        <h2>What happens when a photo is <span>created?</span></h2>
+        <div class="step"><div class="num">1</div><div><h3>The browser sends JSON</h3><p>The upload page resizes the selected image, then sends a data URL with the title and optional caption.</p></div></div>
+        <pre><code>const response = await fetch("/api/dishes", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    title: "Sunday deep dish",
+    caption: "Shared with the class",
+    image: imageDataUrl
+  })
+});</code></pre>
+        <div class="step"><div class="num">2</div><div><h3>The server validates and inspects</h3><p><code>DishUpload</code> checks the fields. <code>parseImageDataUrl</code> accepts JPEG, PNG, or WebP and enforces a 3 MB decoded-image limit. The Inspector checks that the photo shows Chicago deep dish.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h3>The server saves only approved photos</h3><p>Approved photos are inserted through <code>dbDishStore</code>. The gallery response contains metadata and an <code>imageUrl</code>; the image bytes are fetched separately.</p></div></div>
+        <div class="step"><div class="num">4</div><div><h3>The API responds</h3></div></div>
+        <pre><code>HTTP/1.1 201 Created
+{
+  "dish": {
+    "id": 12,
+    "title": "Sunday deep dish",
+    "caption": "Shared with the class",
+    "inspectorNote": "Inspector: looks like deep dish (92% sure)",
+    "createdAt": "2026-11-10T12:00:00.000Z",
+    "imageUrl": "/api/dishes/12/image"
+  }
+}</code></pre>
+        <table>
+          <thead><tr><th>Status</th><th>Meaning in this POST flow</th></tr></thead>
+          <tbody>
+            <tr><td><code>201</code></td><td>Photo passed checks and was created.</td></tr>
+            <tr><td><code>400</code></td><td>Invalid fields, image format, or image size.</td></tr>
+            <tr><td><code>422</code></td><td>Inspector rejected the image as not a confident deep-dish match.</td></tr>
+            <tr><td><code>502</code></td><td>Inspector/model service failed; no photo is saved.</td></tr>
+          </tbody>
+        </table>
+        <div class="card tint"><h3>Keep secrets on the server</h3><p>The browser never receives <code>GEMINI_API_KEY</code>. The API server reads it from Replit Secrets and calls Gemini. Never put API keys in frontend JavaScript or example requests.</p></div>
+        <div class="footer"><span>CHICAGO GALLERY · API POST/PUT GUIDE</span><span>PAGE 2 / 3</span></div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Class exercise · add PUT</p>
+        <h2>Update a photo’s <span>details</span></h2>
+        <p>The Activity 3 branch does not yet have a PUT route. Implement one that replaces a photo’s title and caption while preserving the image and Inspector note.</p>
+        <div class="step"><div class="num">1</div><div><h3>Define the complete editable body</h3><p>In <code>artifacts/api-server/src/routes/dishes.ts</code>, add Zod validation. In this PUT exercise, both fields are required.</p></div></div>
+        <pre><code>const DishDetailsUpdate = z.object({
+  title: z.string().trim().min(1).max(80),
+  caption: z.string().trim().max(280)
+});</code></pre>
+        <div class="step"><div class="num">2</div><div><h3>Add an update operation to the store</h3><p>In <code>DishStore</code>, define <code>update(id, details)</code> and return the updated row or <code>undefined</code>. Implement it in both stores: update the matching array entry in memory, and use Drizzle <code>db.update(...).set(...).where(...).returning()</code> for PostgreSQL.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h3>Add the Express route</h3></div></div>
+        <pre><code>router.put("/dishes/:id", async (req, res): Promise&lt;void&gt; =&gt; {
+  const id = Number(req.params.id);
+  if (!Number.isSafeInteger(id) || id &lt; 1) {
+    res.status(400).json({ error: "Invalid photo ID." });
+    return;
+  }
+  const parsed = DishDetailsUpdate.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Provide a title and caption." });
+    return;
+  }
+  const updated = await store.update(id, parsed.data);
+  if (!updated) {
+    res.status(404).json({ error: "Photo not found." });
+    return;
+  }
+  res.json({ dish: toGalleryItem(updated) });
+});</code></pre>
+        <div class="grid">
+          <div class="card tint"><h3>Try it from the browser</h3><pre><code>await fetch("/api/dishes/12", {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    title: "Updated title",
+    caption: "Updated caption"
+  })
+});</code></pre></div>
+          <div class="card"><h3>Verify these cases</h3><ul><li>Existing ID + valid body → <code>200</code>, updated dish.</li><li>Bad ID or invalid body → <code>400</code>.</li><li>Unknown ID → <code>404</code>.</li><li>GET the gallery again and confirm changes persisted.</li></ul></div>
+        </div>
+        <p class="small"><strong>Instructor check:</strong> POST creates and assigns an ID; PUT targets a known ID and replaces the chosen editable fields. Never trust client input: validate it, check for a missing row, and return the right status.</p>
+        <div class="footer"><span>CHICAGO GALLERY · API POST/PUT GUIDE</span><span>PAGE 3 / 3</span></div>
+      </section>
+    </main>
+  </body>
+</html>

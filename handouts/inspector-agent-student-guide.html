@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Build the Inspector — AI Agent Lab</title>
+    <style>
+      :root{--ink:#20252b;--muted:#58636e;--red:#bd303b;--blue:#203d4b;--wash:#f2f5f6;--line:#d9dfe3;--code:#17232b}
+      *{box-sizing:border-box}
+      body{margin:0;background:#e9edef;color:var(--ink);font:14px/1.48 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+      .page{position:relative;width:min(8.5in,calc(100% - 32px));min-height:11in;margin:22px auto;padding:.57in .67in .68in;background:#fff;box-shadow:0 12px 38px #10202b1a}
+      .eyebrow{margin:0 0 8px;color:var(--red);font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+      h1{margin:0 0 12px;font-size:46px;line-height:.98;letter-spacing:-.055em}
+      h1 span,h2 span{color:var(--red)}
+      h2{margin:0 0 9px;font-size:25px;line-height:1.1;letter-spacing:-.035em}
+      h3{margin:0 0 5px;font-size:15px;line-height:1.25}
+      p{margin:0 0 9px}
+      .lead{max-width:650px;margin-bottom:20px;color:var(--muted);font-size:16px}
+      .rule{height:4px;margin:17px 0;background:var(--red)}
+      .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .card{padding:13px 15px;border:1px solid var(--line);border-top:3px solid var(--red)}
+      .tint{background:var(--wash)}
+      .blue{padding:14px 16px;background:var(--blue);color:white}
+      .blue p:last-child,.card p:last-child{margin-bottom:0}
+      .small{color:var(--muted);font-size:11.5px}
+      table{width:100%;margin:10px 0 14px;border-collapse:collapse;font-size:12px}
+      th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+      th{background:var(--wash);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+      code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      code{color:#962936;font-size:.92em}
+      pre{overflow-wrap:anywhere;margin:7px 0 10px;padding:11px 12px;border-radius:4px;background:var(--code);color:#edf3f6;font-size:10.3px;line-height:1.43;white-space:pre-wrap}
+      pre code{color:inherit}
+      .step{display:grid;grid-template-columns:28px 1fr;gap:9px;margin:12px 0}
+      .num{display:grid;width:25px;height:25px;place-items:center;border-radius:50%;background:var(--red);color:white;font-weight:800}
+      ul,ol{padding-left:19px;margin:6px 0 10px}
+      li{margin:3px 0}
+      .footer{position:absolute;right:.67in;bottom:.25in;left:.67in;display:flex;justify-content:space-between;padding-top:7px;border-top:1px solid var(--line);color:var(--muted);font-size:9px;letter-spacing:.04em}
+      .page-break{break-before:page}
+      @media(max-width:680px){.page{width:100%;min-height:auto;margin:0;padding:24px 20px 54px}.grid{grid-template-columns:1fr}.footer{right:20px;bottom:14px;left:20px}}
+      @media print{@page{size:letter;margin:0}body{background:white;font-size:11.5px}.page{width:8.5in;height:11in;min-height:11in;margin:0;padding:.55in .65in .65in;box-shadow:none;break-after:page;page-break-after:always}.page:last-child{break-after:auto;page-break-after:auto}.footer{right:.65in;bottom:.24in;left:.65in}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="page">
+        <p class="eyebrow">Replit classroom lab · multimodal AI</p>
+        <h1>Build the <span>Inspector</span></h1>
+        <p class="lead">The gallery’s Inspector checks a food photo before the API saves it. It uses a vision model for evidence and regular program code for the final decision.</p>
+        <div class="grid">
+          <div class="blue"><h3>Learning goals</h3><ul><li>Trace an image from the browser to an AI model and back.</li><li>Use a schema to constrain the model’s response.</li><li>Keep final approval rules in application code.</li></ul></div>
+          <div class="card tint"><h3>What “agent” means here</h3><p>A focused AI step: a clear role, image input, structured report, and a programmatic approval rule. It is not allowed to save files or change the database itself.</p></div>
+        </div>
+        <div class="rule"></div>
+        <h2>Inspector <span>flow</span></h2>
+        <table>
+          <thead><tr><th>Stage</th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><td>1 · Browser</td><td>Resizes the selected photo and sends title, caption, and image to <code>POST /api/dishes</code>.</td></tr>
+            <tr><td>2 · API</td><td>Validates text and image type/size before asking the model.</td></tr>
+            <tr><td>3 · Inspector</td><td>Sends the photo plus instructions to Gemini; requests a structured verdict.</td></tr>
+            <tr><td>4 · Rule check</td><td>Application code approves only a match with confidence at least 0.70.</td></tr>
+            <tr><td>5 · Storage</td><td>Approved photo is saved with an Inspector note; rejected photo is not saved.</td></tr>
+          </tbody>
+        </table>
+        <div class="card">
+          <h3>Three parts work together</h3>
+          <p><strong>Model:</strong> interprets image content. <strong>Schema:</strong> makes the answer predictable. <strong>Program:</strong> applies the threshold and controls whether the database write happens.</p>
+        </div>
+        <div class="rule"></div>
+        <h2>Important: does this agent call <span>tools?</span></h2>
+        <div class="card tint">
+          <p><strong>No function-calling tools are registered in this Inspector.</strong> It uses LangChain’s Gemini chat model to send text and an image, then gets structured output. The tools in the developer’s toolkit are the Gemini model integration, LangChain message classes, Zod validation, Express, and the database store. It does not let the model call arbitrary functions.</p>
+          <p class="small">That is a deliberate safety boundary: the model reports what it sees; trusted code decides what happens next.</p>
+        </div>
+        <div class="footer"><span>CHICAGO GALLERY · INSPECTOR AGENT LAB</span><span>PAGE 1 / 3</span></div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Build the pieces · server side</p>
+        <h2>From an image to a <span>verdict</span></h2>
+        <div class="step"><div class="num">1</div><div><h3>Describe the output with Zod</h3><p>In <code>artifacts/api-server/src/agents/verdict.ts</code>, define exactly what the model must report.</p></div></div>
+        <pre><code>export const DishVerdict = z.object({
+  isMatch: z.boolean(),
+  confidence: z.number().min(0).max(1),
+  whatISee: z.string()
+});</code></pre>
+        <div class="step"><div class="num">2</div><div><h3>Create a narrow prompt and model</h3><p><code>dishInspector.ts</code> uses <code>ChatGoogle</code> with the <code>GEMINI_API_KEY</code> Replit Secret. The system instructions define the only task: decide whether the image shows the target dish, and say “not a match” when uncertain.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h3>Send both text and image</h3><p>LangChain’s <code>SystemMessage</code> supplies rules; a <code>HumanMessage</code> contains a question and an image block. <code>withStructuredOutput(DishVerdict)</code> asks for the expected shape.</p></div></div>
+        <pre><code>inspector = model.withStructuredOutput(DishVerdict);
+const result = await inspector.invoke([
+  new SystemMessage(INSPECTOR_RULES),
+  new HumanMessage({
+    contentBlocks: [
+      { type: "text", text: "Does this photo show deep dish?" },
+      { type: "image", mimeType: image.mimeType, data: image.base64 }
+    ]
+  })
+]);</code></pre>
+        <div class="step"><div class="num">4</div><div><h3>Make the final decision in code</h3><p><code>decideVerdict</code> approves only when <code>isMatch</code> is true and confidence is at least <code>0.70</code>. A confident approval gets a short badge. Otherwise it returns a rejection reason for the visitor.</p></div></div>
+        <div class="card tint">
+          <h3>Keep the key private</h3>
+          <p>Add <code>GEMINI_API_KEY</code> using Replit Secrets. Server code reads it from <code>process.env</code>. Never put the value in a code file, browser request, screenshot, handout, or Git commit.</p>
+        </div>
+        <div class="footer"><span>CHICAGO GALLERY · INSPECTOR AGENT LAB</span><span>PAGE 2 / 3</span></div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Student exercise · test and improve</p>
+        <h2>Make the Inspector <span>reliable</span></h2>
+        <div class="step"><div class="num">1</div><div><h3>Trace the save gate</h3><p>Open <code>artifacts/api-server/src/routes/dishes.ts</code>. Find where <code>inspectDish(image)</code> runs. Confirm the database insert happens only after the approved check.</p></div></div>
+        <div class="step"><div class="num">2</div><div><h3>Study the two failure paths</h3><p>A non-match returns HTTP <code>422</code> with an explanation. If Gemini fails, the route returns HTTP <code>502</code>. Neither path saves the photo.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h3>Run a small test set</h3><p>With the API key configured in Replit Secrets, try one clear deep-dish photo, one clearly unrelated food photo, and one ambiguous photo. Record status, note/reason, and whether a database row was created.</p></div></div>
+        <table>
+          <thead><tr><th>Test</th><th>Expected behavior</th></tr></thead>
+          <tbody>
+            <tr><td>Clear target dish</td><td>Approved when model says match and confidence ≥ 0.70; row saved with Inspector note.</td></tr>
+            <tr><td>Unrelated food</td><td>Rejected with 422; no row saved.</td></tr>
+            <tr><td>Unsure / low confidence</td><td>Fail closed: reject; no row saved.</td></tr>
+            <tr><td>Model outage / bad key</td><td>502 response; no row saved; do not reveal the secret.</td></tr>
+          </tbody>
+        </table>
+        <div class="grid">
+          <div class="card tint"><h3>Stretch challenge</h3><p>Add a field such as <code>foodType</code> to the Zod verdict. Update the prompt and UI, then test the result. Keep the application’s approval rule explicit and deterministic.</p></div>
+          <div class="card"><h3>Safety checklist</h3><ul><li>Treat image text as untrusted; the prompt says to ignore instructions inside images.</li><li>Validate model output before using it.</li><li>Use a confidence threshold; do not treat every model answer as true.</li><li>Keep the API key server-side.</li><li>Do not save rejected images.</li></ul></div>
+        </div>
+        <div class="rule"></div>
+        <h3>Instructor discussion</h3>
+        <p class="small">Ask: Why does code—not the model—decide whether to save? What can a confidence score tell us, and what can’t it guarantee? Why is “unsure means reject” appropriate for a gallery with a narrow topic?</p>
+        <p class="small">Project files: <code>src/agents/verdict.ts</code>, <code>src/agents/dishInspector.ts</code>, and <code>src/routes/dishes.ts</code> inside <code>artifacts/api-server</code>.</p>
+        <div class="footer"><span>CHICAGO GALLERY · INSPECTOR AGENT LAB</span><span>PAGE 3 / 3</span></div>
+      </section>
+    </main>
+  </body>
+</html>
