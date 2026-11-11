@@ -42,6 +42,7 @@
 - The guide says it is an AI and never asks for personal information.
 - The trope is playful, never mean or stereotyping.
 - Every error the user can see is a plain sentence that says what to do next.
+- Testinng testing 
 
 ---
 
